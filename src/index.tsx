@@ -53,9 +53,9 @@ const AllSensors = NativeModules.AllSensors
     }
     
     
-    export function removeSensorListener(sensorName: string, listener: (data: any) => void): void {
+    export function removeSensorListener(sensorName: string): void {
       if (Platform.OS === 'android') {
-        DeviceEventEmitter.removeListener(sensorName, listener);
+        DeviceEventEmitter.removeAllListeners(sensorName);
       } else {
         throw new Error("Removing sensor listeners is not supported on iOS");
       }
