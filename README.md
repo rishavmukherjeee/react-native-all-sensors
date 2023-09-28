@@ -83,28 +83,15 @@ isSensorAvailable('proximity').then((available) => {
              "OrientaionData"
 ## Sample Code
 ```js
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
-import React,{useState,useEffect} from 'react'
-import {start, stop, isSensorAvailable,onSensorChanged,removeSensorListener} from 'react-native-all-sensors'
-const App = () => {
-  const [proximity, setProximity] = useState(0)
-  const [light, setLight] = useState(0)
+import {  start, 
+          stop, 
+          isSensorAvailable,
+          onSensorChanged,
+          removeSensorListener } from 'react-native-all-sensors'
+const AllSensors = () => {
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   useEffect(() => {
-    isSensorAvailable('proximity').then((available) => {
-      if (available) {
-        start('proximity').then(() => {
-          console.log('Proximity sensor started')
-          onSensorChanged('ProximityData', (data) => {
-            setProximity(data)
-          })
-        }
-        )
-      }
-      else{
-        console.log("no proximity:<")
-      }
-    })
+  
     isSensorAvailable('accelerometer').then((available) => {
       if (available) {
         start('accelerometer').then(() => {
@@ -112,78 +99,21 @@ const App = () => {
           onSensorChanged('AccelerometerData', (data) => {
             setAccelerometer(data)
           })
-        }
-        )
-      }
-      else{
-        console.log("no accelerometer:<")
-      }
-    })
-
-    isSensorAvailable('light').then((available) => {
-      if (available) {
-        start('light').then(() => {
-          console.log('Light sensor started')
-          onSensorChanged('LightData', (data) => {
-            setLight(data)
-          })
-        }
-        )
-      }
-      else{
-        console.log("no light:<")
+        })
       }
     })
   }
   , [])
-
-  const stopAccelerometer = () => {
-    removeSensorListener('AccelerometerData')
-    stop('accelerometer')
-  }
-  const startAccelerometer = () => {
-    start('accelerometer')
-    onSensorChanged('AccelerometerData', (data) => {
-      setAccelerometer(data)
-    })
-  }
   return (
     <View>
-      <Text>Proximity: {proximity}</Text>
       <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
-      <Text>Light: {light}</Text>
-      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>Stop Accelerometer</Text></TouchableOpacity>
-      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start Accelerometer</Text></TouchableOpacity>
     </View>
   )
 }
-
-export default App
-
-const styles = StyleSheet.create({
-  stop:{
-    backgroundColor:'red',
-    color:'white',
-    fontStyle:'bold',
-    width:50,
-    height:50,
-    margin:100,
-    justifyContent:'center',
-    alignItems:'center'
-  },
-  start:{
-    backgroundColor:'green',
-    color:'white',
-    fontStyle:'bold',
-    width:50,
-    height:50,
-    marginLeft:100,
-    justifyContent:'center',
-    alignItems:'center'
-  }
-})
+export default AllSensors
 ```
-
+Sample Demo App Could be found Here:
+https://github.com/Saboten758/allsenz
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
