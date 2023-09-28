@@ -15,8 +15,16 @@ const AllSensors = NativeModules.AllSensors
           throw new Error(LINKING_ERROR);
         },
       }
-    );
 
+    );
+function capitalizeAndAddData(inputString:String) {
+  if (typeof inputString !== 'string' || inputString.length === 0) {
+    return 'InvalidInputData'; }
+    
+  const capitalizedString = inputString.charAt(0).toUpperCase() + inputString.slice(1);
+
+  return capitalizedString + 'Data';
+}
 
     export function start(sensorName: string): Promise<boolean> {
       if (Platform.OS === 'android') {
@@ -60,4 +68,26 @@ const AllSensors = NativeModules.AllSensors
         throw new Error("Removing sensor listeners is not supported on iOS");
       }
     }
-    
+    export function startNow(sensorName: string, listener: (data: any) => void): Promise<boolean> {
+      return start(sensorName)
+        .then(() => {
+          onSensorChanged(capitalizeAndAddData(sensorName), listener);
+          return true;
+        })
+        .catch((error) => {
+          console.error("Error starting sensor:", error);
+          return false;
+        });
+    }
+
+    export function stopNow(sensorName: string): Promise<boolean> {
+      return stop(sensorName)
+        .then(() => {
+          removeSensorListener(sensorName);
+          return true;
+        })
+        .catch((error) => {
+          console.error("Error stopping sensor:", error);
+          return false;
+        });
+    }

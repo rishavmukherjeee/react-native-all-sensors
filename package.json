@@ -1,7 +1,7 @@
 {
   "name": "react-native-all-sensors",
-  "version": "0.1.0",
-  "description": "It should provide users with all the sensors available in mobile phones",
+  "version": "0.1.1",
+  "description": "It should provide users with all 13 the sensors available in android mobile phones",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",

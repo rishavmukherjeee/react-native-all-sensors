@@ -1,61 +1,54 @@
-import React, { useEffect ,useState } from 'react';
-import { View, Text,  } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React,{useState} from 'react'
 import {
-  start,
-  stop,
-  isSensorAvailable,
-  onSensorChanged,
-  removeSensorListener,
-} from 'react-native-all-sensors';
+        startNow,stopNow
 
-export default function App() {
-  const [proximity, setProximity] = useState(0);
-  useEffect(() => {
-    // Check if a sensor is available
-    isSensorAvailable('proximity')
-      .then((available) => {
-        if (available) {
-          console.log('Proximity sensor is available.');
-          // Start listening to sensor changes
-          start('proximity').then((started) => {
-            if (started) {
-              console.log('Sensor started successfully');
-            }
-          })
-          .catch((error) => {
-            console.error('Failed to start sensor', error);
-          });
+} from 'react-native-all-sensors'
+const App = () => {
 
-          // Add a listener for sensor data
-          onSensorChanged('ProximityData', (data) => {
-            setProximity(data);
-          });
-        } else {
-          console.log('Proximity sensor is not available.');
-        }
-      })
-    // Stop listening when the component unmounts
-    return () => {
-      stop('proximity')
-        .then(() => {
-          console.log('Proximity sensor stopped.');
-        })
-        .catch((error) => {
-          console.error('Error stopping proximity sensor:', error);
-        });
+  const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
+  
+  
 
-      // Remove the sensor listener
-      removeSensorListener('proximity', (data) => {
-        console.log('Removed proximity sensor listener.');
-      });
-    };
-  }, []);
-
+  const stopAccelerometer = () => {
+    stopNow('accelerometer')
+  }
+  const startAccelerometer = () => {
+    startNow('accelerometer', (data) => {
+      setAccelerometer(data)
+    }
+    )
+  }
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>React Native Sensors Example</Text>
-      <Text>Proximity sensor: {proximity}</Text>
-      {/* Add UI components here */}
+    <View>
+      <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
+      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>STOP </Text></TouchableOpacity>
+      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start</Text></TouchableOpacity>
     </View>
-  );
+  )
 }
+
+export default App
+
+const styles = StyleSheet.create({
+  stop:{
+    backgroundColor:'red',
+    color:'white',
+    fontStyle:'bold',
+    width:50,
+    height:50,
+    margin:100,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  start:{
+    backgroundColor:'green',
+    color:'white',
+    fontStyle:'bold',
+    width:50,
+    height:50,
+    marginLeft:100,
+    justifyContent:'center',
+    alignItems:'center'
+  }
+})
