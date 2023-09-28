@@ -89,7 +89,6 @@ import {start, stop, isSensorAvailable,onSensorChanged,removeSensorListener} fro
 const App = () => {
   const [proximity, setProximity] = useState(0)
   const [light, setLight] = useState(0)
-  const [ambi, setAmbi] = useState(0)
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   useEffect(() => {
     isSensorAvailable('proximity').then((available) => {
@@ -102,6 +101,9 @@ const App = () => {
         }
         )
       }
+      else{
+        console.log("no proximity:<")
+      }
     })
     isSensorAvailable('accelerometer').then((available) => {
       if (available) {
@@ -112,6 +114,9 @@ const App = () => {
           })
         }
         )
+      }
+      else{
+        console.log("no accelerometer:<")
       }
     })
 
@@ -127,21 +132,6 @@ const App = () => {
       }
       else{
         console.log("no light:<")
-      }
-    })
-
-    isSensorAvailable('ambientTemperature').then((available) => {
-      if (available) {
-        start('ambientTemperature').then(() => {
-          console.log('ambientTemperature sensor started')
-          onSensorChanged('ambientTemperatureData', (data) => {
-            setAmbi(data)
-          })
-        }
-        )
-      }
-      else{
-        console.log("no ambient temp:<")
       }
     })
   }
@@ -162,9 +152,8 @@ const App = () => {
       <Text>Proximity: {proximity}</Text>
       <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
       <Text>Light: {light}</Text>
-      <Text>Ambient Temp: {ambi}</Text>
-      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>STOP </Text></TouchableOpacity>
-      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>Stop Accelerometer</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start Accelerometer</Text></TouchableOpacity>
     </View>
   )
 }
