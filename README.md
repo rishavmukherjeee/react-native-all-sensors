@@ -88,10 +88,10 @@ import {  start,
           isSensorAvailable,
           onSensorChanged,
           removeSensorListener } from 'react-native-all-sensors'
+
 const AllSensors = () => {
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   useEffect(() => {
-  
     isSensorAvailable('accelerometer').then((available) => {
       if (available) {
         start('accelerometer').then(() => {
@@ -99,7 +99,11 @@ const AllSensors = () => {
           onSensorChanged('AccelerometerData', (data) => {
             setAccelerometer(data)
           })
-        })
+        }
+        )
+      }
+      else{
+        console.log("no accel:<")
       }
     })
   }
