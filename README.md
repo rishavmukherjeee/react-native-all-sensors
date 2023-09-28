@@ -1,6 +1,10 @@
 # react-native-all-sensors
 
-It provides users with all the sensors available in android mobile phones and also provides the data from the sensors in real time.
+It provides users with all the 13 sensors available in android mobile phones and also provides the data from the sensors in real time. 
+<br><br>
+(Fingerprint and time delay for sensor parameter will be added in next update,
+Ios support will be added soon.)
+
 
 ## Installation
 
@@ -15,7 +19,9 @@ npm i react-native-all-sensors
 import {start,
         stop,
         isSensorAvailable,
-        onSensorChanged} 
+        onSensorChanged,
+        removeSensorListener
+        } 
 from 'react-native-all-sensors'
 
 /* ['proximity', 'light', 'accelerometer',
@@ -41,7 +47,8 @@ isSensorAvailable('proximity').then((available) => {
     })
 
     //after work is done 
-    stop('proximity')
+    removeSensorListener('ProximityData')//stops listening
+    stop('proximity')//sensor stops
 ```
 ## Available Sensors
 
@@ -76,11 +83,13 @@ isSensorAvailable('proximity').then((available) => {
              "OrientaionData"
 ## Sample Code
 ```js
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import React,{useState,useEffect} from 'react'
-import {start, stop, isSensorAvailable,onSensorChanged} from 'react-native-all-sensors'
+import {start, stop, isSensorAvailable,onSensorChanged,removeSensorListener} from 'react-native-all-sensors'
 const App = () => {
   const [proximity, setProximity] = useState(0)
+  const [light, setLight] = useState(0)
+  const [ambi, setAmbi] = useState(0)
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   useEffect(() => {
     isSensorAvailable('proximity').then((available) => {
@@ -105,25 +114,85 @@ const App = () => {
         )
       }
     })
-    return () => {
-      stop('proximity')
-      stop('accelerometer')
-    }
+
+    isSensorAvailable('light').then((available) => {
+      if (available) {
+        start('light').then(() => {
+          console.log('Light sensor started')
+          onSensorChanged('LightData', (data) => {
+            setLight(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no light:<")
+      }
+    })
+
+    isSensorAvailable('ambientTemperature').then((available) => {
+      if (available) {
+        start('ambientTemperature').then(() => {
+          console.log('ambientTemperature sensor started')
+          onSensorChanged('ambientTemperatureData', (data) => {
+            setAmbi(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no ambient temp:<")
+      }
+    })
   }
   , [])
 
-
+  const stopAccelerometer = () => {
+    removeSensorListener('AccelerometerData')
+    stop('accelerometer')
+  }
+  const startAccelerometer = () => {
+    start('accelerometer')
+    onSensorChanged('AccelerometerData', (data) => {
+      setAccelerometer(data)
+    })
+  }
   return (
     <View>
       <Text>Proximity: {proximity}</Text>
       <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
+      <Text>Light: {light}</Text>
+      <Text>Ambient Temp: {ambi}</Text>
+      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>STOP </Text></TouchableOpacity>
+      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start</Text></TouchableOpacity>
     </View>
   )
 }
 
 export default App
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  stop:{
+    backgroundColor:'red',
+    color:'white',
+    fontStyle:'bold',
+    width:50,
+    height:50,
+    margin:100,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  start:{
+    backgroundColor:'green',
+    color:'white',
+    fontStyle:'bold',
+    width:50,
+    height:50,
+    marginLeft:100,
+    justifyContent:'center',
+    alignItems:'center'
+  }
+})
 ```
 
 ## Contributing
