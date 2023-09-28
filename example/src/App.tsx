@@ -1,29 +1,27 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React,{useState} from 'react'
-import {
-        startNow,stopNow
-
-} from 'react-native-all-sensors'
+import {startNow,stopNow} from 'react-native-all-sensors'
 const App = () => {
 
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
-  
-  
 
-  const stopAccelerometer = () => {
-    stopNow('accelerometer')
-  }
-  const startAccelerometer = () => {
-    startNow('accelerometer', (data) => {
-      setAccelerometer(data)
-    }
-    )
-  }
   return (
     <View>
       <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
-      <TouchableOpacity style={styles.stop} onPress={stopAccelerometer}><Text>STOP </Text></TouchableOpacity>
-      <TouchableOpacity style={styles.start} onPress={startAccelerometer}><Text>Start</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.stop} 
+      onPress={() =>
+        stopNow('accelerometer')
+        }>
+        <Text>STOP </Text>
+        </TouchableOpacity>
+      <TouchableOpacity style={styles.start} 
+      onPress={() =>
+        startNow('accelerometer', (data) => {
+          setAccelerometer(data)
+        })
+        }>
+        <Text>Start</Text>
+        </TouchableOpacity>
     </View>
   )
 }
