@@ -1,6 +1,6 @@
 # react-native-all-sensors
 
-It provides users with all the 13 sensors available in android mobile phones and also provides the data from the sensors in real time. 
+This package provides users access to all the 13 different sensors available in android mobile phones and also provides realtime sensor data. 
 <br><br>
 (Fingerprint and time delay for sensor parameter will be added in next update,
 Ios support will be added soon.)
