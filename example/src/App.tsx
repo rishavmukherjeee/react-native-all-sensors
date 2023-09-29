@@ -4,7 +4,7 @@ import {startNow,stopNow} from 'react-native-all-sensors'
 const App = () => {
 
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
-
+  const [gyroscope, setGyroscope] = useState({x:0,y:0,z:0})
   return (
     <View>
       <Text>Accelerometer: {accelerometer.x} {accelerometer.y} {accelerometer.z}</Text>
@@ -22,6 +22,22 @@ const App = () => {
         }>
         <Text>Start</Text>
         </TouchableOpacity>
+        <Text>Gyroscope: {gyroscope.x} {gyroscope.y} {gyroscope.z}</Text>
+      <TouchableOpacity style={styles.stop}
+      onPress={() =>
+        stopNow('gyroscope')
+        }>
+        <Text>STOP </Text>
+        </TouchableOpacity>
+      <TouchableOpacity style={styles.start}
+      onPress={() =>
+        startNow('gyroscope', (data) => {
+          setGyroscope(data)
+        })
+        }>
+        <Text>Start</Text>
+        </TouchableOpacity>
+        
     </View>
   )
 }
