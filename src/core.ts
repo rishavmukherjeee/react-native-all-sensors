@@ -14,14 +14,10 @@ const AllSensors = NativeModules.AllSensors
     );
 
 function capitalizeAndAddData(sensorName: SensorNameType): ListenerNameType {
-  try {
-    const capitalizedString =
-      sensorName.charAt(0).toUpperCase() + sensorName.slice(1);
+  const capitalizedString =
+    sensorName.charAt(0).toUpperCase() + sensorName.slice(1);
 
-    return capitalizedString + 'Data';
-  } catch (error) {
-    return 'InvalidInputData';
-  }
+  return (capitalizedString + 'Data') as ListenerNameType;
 }
 
 export function start(sensorName: SensorNameType): Promise<boolean> {
